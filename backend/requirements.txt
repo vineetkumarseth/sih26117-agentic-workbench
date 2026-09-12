@@ -1,0 +1,37 @@
+# --- Web framework ---------------------------------------------------
+fastapi==0.141.1
+uvicorn[standard]==0.52.4
+pydantic==2.13.5
+pydantic-settings==2.15.0
+python-multipart==0.0.32
+
+# --- Agent orchestration ------------------------------------------------
+langgraph==1.2.11
+langchain-core==1.6.1
+
+# --- Retrieval (local/embedded vector store + local embeddings) --------
+qdrant-client==1.19.0
+fastembed==0.8.0
+pypdf==6.16.2
+
+# --- Guardrails (optional full engine — see app/guardrails/guard.py) ---
+#nemoguardrails==0.24.0
+
+# --- Security -----------------------------------------------------------
+# (passlib deliberately not used — its bcrypt backend detection breaks on
+# bcrypt>=4.1; see the comment in app/security/auth.py)
+bcrypt==5.0.0
+python-jose[cryptography]==3.5.0
+slowapi==0.1.10
+
+# --- Data -----------------------------------------------------------
+sqlalchemy==2.0.52
+greenlet==3.5.5
+aiosqlite==0.22.1
+
+# --- LLM client + config ------------------------------------------------
+httpx==0.28.1
+python-dotenv==1.2.3
+
+# --- Optional observability export --------------------------------------
+langfuse==4.15.1

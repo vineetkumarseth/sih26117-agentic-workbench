@@ -1,0 +1,28 @@
+# --- Secrets ---------------------------------------------------------
+.env
+backend/.env
+frontend/.env
+
+# --- Python -----------------------------------------------------------
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# --- Data / runtime state (never commit plant documents or the DB) -----
+backend/data/uploads/*
+!backend/data/uploads/.gitkeep
+backend/data/qdrant/
+backend/data/*.db
+backend/data/workbench.db
+
+# --- Node / frontend --------------------------------------------------
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# --- OS / editor --------------------------------------------------------
+.DS_Store
+.vscode/
+*.log

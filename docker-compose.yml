@@ -1,0 +1,59 @@
+# One-command backend stack for demos/deployment.
+#
+#   docker compose up --build            # backend + Qdrant
+#   docker compose --profile llm up --build   # + a local Ollama container too
+#
+# The frontend is intentionally NOT containerized here — for a hackathon
+# demo, `cd frontend && npm run dev` gives you hot-reload and is faster
+# to iterate on than rebuilding an image. See frontend/README.md for a
+# production static build if you want to containerize it later.
+
+services:
+  qdrant:
+    image: qdrant/qdrant:v1.11.0
+    restart: unless-stopped
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'cat < /dev/null > /dev/tcp/localhost/6333'"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      # Overrides .env so the backend talks to the qdrant *service name*
+      # (Docker's internal DNS) rather than localhost.
+      QDRANT_URL: http://qdrant:6333
+    ports:
+      - "8000:8000"
+    volumes:
+      - backend_data:/app/data
+    depends_on:
+      qdrant:
+        condition: service_healthy
+
+  # Optional: run the LLM itself in a container too. Needs a real model
+  # pulled in before it's useful — see scripts/pull_models.sh — and, for
+  # anything above a tiny model, a GPU passed through to Docker (platform
+  # specific, not configured here). Start with:
+  #   docker compose --profile llm up --build
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    profiles: ["llm"]
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+volumes:
+  qdrant_data:
+  backend_data:
+  ollama_data:
