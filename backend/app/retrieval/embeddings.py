@@ -79,7 +79,14 @@ def _get_model():
     with _lock:
         if _model is not None or _model_load_failed:
             return _model
-
+        if settings.LOW_MEMORY_MODE:
+            logger.info(
+                "LOW_MEMORY_MODE=true — skipping fastembed entirely and using the "
+                "hash-based fallback embedding to keep this process's memory "
+                "footprint small on a constrained host."
+            )
+            _model_load_failed = True
+            return None
         if not _model_cache_exists() and not _huggingface_reachable():
             logger.warning(
                 "Embedding model %s isn't cached locally and huggingface.co isn't reachable "
