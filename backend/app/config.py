@@ -77,7 +77,8 @@ class Settings(BaseSettings):
     QDRANT_URL: str | None = None
     QDRANT_LOCAL_PATH: str = "./data/qdrant"
     QDRANT_COLLECTION: str = "industrial_documents"
-    EMBEDDING_MODEL: str = "BAAI/bge-small-en-v1.5"  # open-weight, runs locally via fastembed
+    EMBEDDING_MODEL: str = "BAAI/bge-small-en-v1.5"
+    LOW_MEMORY_MODE: bool = False# open-weight, runs locally via fastembed
 
     # --- LLM (Ollama-compatible local inference) -------------------------
     OLLAMA_BASE_URL: str = "http://localhost:11434"
